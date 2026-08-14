@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 
-const BASE = 'http://localhost:3001/api/admin';
+const BASE = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/admin` : 'http://localhost:3001/api/admin';
 const apiClient = (token) =>
   axios.create({ baseURL: BASE, headers: { Authorization: `Bearer ${token}` } });
 
