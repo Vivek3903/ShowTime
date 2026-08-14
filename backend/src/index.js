@@ -32,25 +32,11 @@ console.log(`Loaded ${movieCount} movies into memory.`);
 // Middleware
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174'];
-    if (process.env.FRONTEND_URL) {
-      allowedOrigins.push(process.env.FRONTEND_URL);
-    }
-    
-    // In production, we might want to be more permissive with Vercel preview URLs
-    if (process.env.NODE_ENV === 'production') {
-      return callback(null, true); // Or validate against a specific regex if needed
-    }
-
-    if (allowedOrigins.indexOf(origin) === -1) {
-      return callback(new Error('The CORS policy for this site does not allow access from the specified Origin.'), false);
-    }
-    return callback(null, true);
+    // Reflect the exact origin to allow credentials while bypassing strict string matches
+    // This prevents 500 errors on OPTIONS preflight requests when Vercel URLs have trailing slashes
+    callback(null, origin || true);
   },
-  methods: ['GET', 'POST', 'DELETE'], // ensure DELETE is allowed for admin
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], 
   credentials: true
 }));
 
