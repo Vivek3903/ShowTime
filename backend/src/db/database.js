@@ -5,8 +5,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Database will be created at backend/showtime.db
-const dbPath = path.resolve(__dirname, '../../showtime.db');
+// Database will be created at DB_PATH or backend/showtime.db
+const dbPath = process.env.DB_PATH || path.resolve(__dirname, '../../showtime.db');
 const db = new DatabaseSync(dbPath);
 
 db.exec('PRAGMA journal_mode = WAL;');
