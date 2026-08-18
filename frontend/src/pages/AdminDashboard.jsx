@@ -13,8 +13,9 @@ const apiClient = (token) =>
   axios.create({ baseURL: BASE, headers: { Authorization: `Bearer ${token}` } });
 
 /* ─── tiny helpers ─────────────────────────────────────────── */
-const fmt = (d) => d ? new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
-const fmtTime = (d) => d ? new Date(d).toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : '—';
+const parseSqlDate = (d) => d ? new Date(d.replace(' ', 'T') + 'Z') : null;
+const fmt = (d) => d ? parseSqlDate(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+const fmtTime = (d) => d ? parseSqlDate(d).toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : '—';
 
 /* ─── stat card ─────────────────────────────────────────────── */
 const Stat = ({ icon: Icon, label, value, sub, colorClass }) => {
