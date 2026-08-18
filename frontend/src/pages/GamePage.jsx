@@ -84,6 +84,7 @@ const GamePage = () => {
     if (gameState !== 'playing') return;
     
     stopTimer();
+    setCurrentResult(null); // Clear previous result before showing overlay
     setGameState('round_complete');
     
     const timeUsed = maxTime - timeLeft;
