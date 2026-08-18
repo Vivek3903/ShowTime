@@ -21,7 +21,9 @@ const LandingPage = () => {
       const data = await createPlayer(usernameInput.trim());
       setPlayer(data.username, data.id);
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to create player');
+      let errMsg = err.response?.data?.error || 'Failed to create player';
+      if (typeof errMsg === 'object') errMsg = errMsg.message || JSON.stringify(errMsg);
+      setError(errMsg);
     } finally {
       setIsLoading(false);
     }

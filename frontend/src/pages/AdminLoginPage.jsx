@@ -28,7 +28,9 @@ const AdminLoginPage = () => {
       localStorage.setItem('admin_username', data.username);
       navigate('/admin/dashboard');
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed');
+      let errMsg = err.response?.data?.error || 'Login failed';
+      if (typeof errMsg === 'object') errMsg = errMsg.message || JSON.stringify(errMsg);
+      setError(errMsg);
     } finally {
       setIsLoading(false);
     }
