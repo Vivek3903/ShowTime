@@ -53,7 +53,7 @@ const LandingPage = () => {
         {/* Player Section */}
         {!player ? (
           <div className="w-full max-w-md glass-card p-8 rounded-2xl">
-            <h2 className="text-2xl font-cinzel mb-6 text-center text-white">Enter the Cinema</h2>
+            <h2 className="text-2xl font-cinzel mb-6 text-center text-white">Enter your name</h2>
             <form onSubmit={handleJoin} className="space-y-4">
               <div>
                 <div className="relative">
