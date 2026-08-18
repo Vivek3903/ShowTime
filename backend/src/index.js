@@ -62,7 +62,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something broke!' });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`ShowTime backend is running on http://localhost:${PORT}`);
   console.log(`Serving static frames from: ${framesDir}`);
 });

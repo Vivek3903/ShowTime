@@ -1,7 +1,15 @@
 import axios from 'axios';
 
+const getBaseUrl = () => {
+  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+  if (typeof window !== 'undefined') {
+    return `http://${window.location.hostname}:3001/api`;
+  }
+  return 'http://localhost:3001/api';
+};
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001/api',
+  baseURL: getBaseUrl(),
   timeout: 10000,
 });
 
@@ -45,7 +53,14 @@ export const getFrameUrl = (framePath) => {
   // framePath is like "Bahubali The Beginning/frame_25percent.jpg"
   // static server mounts at /frames, so prepend it and encode spaces
   const encoded = framePath.split('/').map(encodeURIComponent).join('/');
-  return `http://localhost:3001/frames/${encoded}`;
+  const getStaticBaseUrl = () => {
+    if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL.replace('/api', '');
+    if (typeof window !== 'undefined') {
+      return `http://${window.location.hostname}:3001`;
+    }
+    return 'http://localhost:3001';
+  };
+  return `${getStaticBaseUrl()}/frames/${encoded}`;
 };
 
 export default api;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CheckCircle2, XCircle, Trophy, RotateCcw, ListOrdered } from 'lucide-react';
+import { CheckCircle2, XCircle, Trophy, RotateCcw, ListOrdered, Home } from 'lucide-react';
 
 const GameSummary = ({ rounds, totalScore, leaderboardRank, gameType, onPlayAgain }) => {
   const navigate = useNavigate();
@@ -87,7 +87,14 @@ const GameSummary = ({ rounds, totalScore, leaderboardRank, gameType, onPlayAgai
           className="flex items-center justify-center gap-2 py-4 px-8 bg-white/10 hover:bg-white/20 text-white font-medium rounded-xl transition-all backdrop-blur-md border border-white/10"
         >
           <ListOrdered className="w-5 h-5" />
-          View Leaderboard
+          Leaderboard
+        </button>
+        <button 
+          onClick={() => navigate('/')}
+          className="flex items-center justify-center gap-2 py-4 px-8 bg-white/10 hover:bg-white/20 text-white font-medium rounded-xl transition-all backdrop-blur-md border border-white/10"
+        >
+          <Home className="w-5 h-5" />
+          Home
         </button>
       </div>
     </div>

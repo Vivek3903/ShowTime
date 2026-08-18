@@ -16,7 +16,14 @@ const AdminLoginPage = () => {
     setIsLoading(true);
     setError('');
     try {
-      const { data } = await axios.post('http://localhost:3001/api/admin/login', { username, password });
+      const getBaseUrl = () => {
+        if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+        if (typeof window !== 'undefined') {
+          return `http://${window.location.hostname}:3001/api`;
+        }
+        return 'http://localhost:3001/api';
+      };
+      const { data } = await axios.post(`${getBaseUrl()}/admin/login`, { username, password });
       localStorage.setItem('admin_token', data.token);
       localStorage.setItem('admin_username', data.username);
       navigate('/admin/dashboard');
