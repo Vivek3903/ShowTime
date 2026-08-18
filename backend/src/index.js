@@ -26,8 +26,18 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Load store
-const movieCount = loadMovies();
-console.log(`Loaded ${movieCount} movies into memory.`);
+let movieCount = loadMovies();
+if (movieCount === 0) {
+  console.log('Database is empty. Running auto-seed...');
+  import('./db/seed.js').then(({ default: seed }) => {
+    seed().then(() => {
+      movieCount = loadMovies();
+      console.log(`Loaded ${movieCount} movies into memory after seeding.`);
+    });
+  });
+} else {
+  console.log(`Loaded ${movieCount} movies into memory.`);
+}
 
 // Middleware
 app.use(cors({

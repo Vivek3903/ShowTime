@@ -5,8 +5,16 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+import fs from 'fs';
+
 // Database will be created at DB_PATH or backend/showtime.db
-const dbPath = process.env.DB_PATH || path.resolve(__dirname, '../../showtime.db');
+const defaultDbPath = path.resolve(__dirname, '../../showtime.db');
+const dbPath = process.env.DB_PATH || defaultDbPath;
+
+if (process.env.DB_PATH && !fs.existsSync(dbPath) && fs.existsSync(defaultDbPath)) {
+  fs.copyFileSync(defaultDbPath, dbPath);
+}
+
 const db = new DatabaseSync(dbPath);
 
 db.exec('PRAGMA journal_mode = WAL;');
