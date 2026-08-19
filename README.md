@@ -1,104 +1,91 @@
 # ShowTime 🎬
 
-A daily Telugu movie guessing game. Guess the movie from a single trailer frame — reveals of year and genre unlock over time if you're stuck.
+**ShowTime** is an immersive, web-based Telugu movie guessing game. Test your cinematic knowledge by guessing the movie title from a single frame! Features a rich, theatrical UI with dynamic hints, daily challenges, and global leaderboards.
 
-## Prerequisites
+---
 
-- Node.js 18+
-- npm 9+
+## 🌟 Features
 
-## Project Structure
+*   **Two Game Modes**:
+    *   **Quick Game**: 5 randomized rounds. Dynamic hints (Year and Genre) unlock as the timer ticks down. Faster guesses earn more points!
+    *   **Daily Challenge**: A globally synced, fixed set of 5 movies each day. Hardcore mode with no hints and only one attempt allowed per day.
+*   **Dynamic Hint System**: As the 20-second timer drops, the movie's Release Year (at 15s) and Genre (at 10s) are automatically revealed to help you out.
+*   **Global Leaderboard**: Compete with others and climb the ranks in the Hall of Fame.
+*   **Admin Dashboard**: Secure, token-protected control panel to monitor total players, games played, and a feed of recent scores.
+*   **Anti-Cheat System**: Secure backend validation using JWT-signed game sessions to prevent forged score submissions.
 
-```
-ShowTime/
-├── backend/        # Node.js + Express API + SQLite
-├── frontend/       # React + Vite + Tailwind CSS
-├── frames/         # Movie frame images (populated by build_dataset.py)
-├── frames.csv      # Dataset: one row per frame per movie
-└── movies.csv      # Full Telugu movies metadata
-```
+---
 
-## Quick Start
+## 🎨 Theme & Aesthetic
 
-### 1. Seed the database
+The application is built with a premium, cinematic visual language designed to make players feel like they are in a theater:
 
+*   **Colors**: Deep theater black (`#0a0a0f`) combined with glowing cinematic gold (`#d4af37`).
+*   **Typography**: The *Cinzel* font is used for headings to evoke a classic movie poster aesthetic.
+*   **Visual Effects**: 
+    *   A custom static **Film Grain** CSS overlay covers the background.
+    *   **Glassmorphism** cards (`glass-card`) with frosted blurs.
+    *   Smooth CSS animations (slide-ups, fade-ins, and pulsating glows).
+    *   Dynamic, color-shifting progress bars for the game timer.
+
+---
+
+## 💻 Tech Stack
+
+### Frontend
+*   **Framework**: React 18 (Vite)
+*   **Styling**: Tailwind CSS
+*   **Icons**: Lucide React
+*   **Routing**: React Router v6
+*   **Hosting**: Vercel
+
+### Backend
+*   **Runtime**: Node.js
+*   **Framework**: Express 4
+*   **Database**: SQLite (`node:sqlite`) with WAL mode for performance
+*   **Security**: JSON Web Tokens (JWT) for session tracking, API Rate Limiting
+*   **Hosting**: Railway (Dockerized with Persistent Volumes)
+
+---
+
+## 🚀 Quick Start (Local Development)
+
+### 1. Set up the Backend
 ```bash
 cd backend
 npm install
+# Seed the database with movies/frames from frames.csv
 npm run seed
-```
-
-This reads `frames.csv` from the project root and populates the SQLite database (`backend/showtime.db`).
-
-### 2. Start the backend
-
-```bash
-cd backend
+# Start the server (runs on http://localhost:3001)
 npm run dev
 ```
 
-Backend runs at **http://localhost:3001**
-
-### 3. Start the frontend
-
+### 2. Set up the Frontend
 ```bash
 cd frontend
 npm install
+# Create a .env file and set VITE_API_URL=http://localhost:3001/api
+# Start the development server (runs on http://localhost:5173)
 npm run dev
 ```
 
-Frontend runs at **http://localhost:5173**
-
 ---
 
-## Game Modes
+## 📁 Project Structure
 
-### Quick Game
-- 5 rounds, 20 seconds per round
-- **0–10s**: Frame only → correct guess = **10 pts**
-- **10–15s**: Year revealed → correct guess = **8 pts**
-- **15–20s**: Genre revealed → correct guess = **7 pts**
-- **20s**: Round auto-advances, **0 pts**
-
-### Daily Challenge
-- One fixed set of 5 movies per calendar day (seeded by date — same for all players)
-- 10 seconds per round, frame-only, no reveals
-- Can only be played **once per day per player** (enforced server-side)
-
----
-
-## Updating the Dataset
-
-1. Add rows to `frames.csv` (columns: `movie, year, certificate, genre, rating, youtube_title, youtube_url, frame, frame_path, percentage, timestamp_seconds`)
-2. Add the corresponding frame images to `frames/<MovieFolder>/`
-3. Re-run `npm run seed` in the backend — it safely upserts new entries
-
----
-
-## Environment Variables (backend/.env)
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `JWT_SECRET` | `showtime_secret_...` | Secret for signing game session tokens |
-| `PORT` | `3001` | Backend port |
-| `NODE_ENV` | `development` | Environment |
-
----
-
-## Security
-
-- Game sessions are JWT-signed — score submission is rejected without a valid token
-- Daily play enforced server-side via `daily_plays` table
-- Rate limiting: 100 req/15min general, 10 req/5min on score submission
-- Input validation on all endpoints
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React 18, Vite, Tailwind CSS |
-| Backend | Node.js, Express 4 |
-| Database | SQLite (via better-sqlite3) |
-| Auth | JWT (game session tokens only) |
+```text
+ShowTime/
+├── backend/
+│   ├── src/
+│   │   ├── db/          # SQLite connection and seeding logic
+│   │   ├── routes/      # Express API routes (game, admin, leaderboards)
+│   │   └── middleware/  # Rate limiters & JWT validation
+│   ├── frames/          # Static movie frame images
+│   └── frames.csv       # Source dataset for the SQLite database
+└── frontend/
+    ├── src/
+    │   ├── components/  # Reusable UI (Timer, GuessInput, MovieFrame)
+    │   ├── pages/       # Views (GamePage, AdminDashboard, LeaderboardPage)
+    │   └── utils/       # Axios API client
+    └── vercel.json      # Vercel SPA routing configuration
+```
